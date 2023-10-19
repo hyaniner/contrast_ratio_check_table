@@ -1,0 +1,25 @@
+.main_container
+{
+    border: 1px solid blue;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: fit-content;
+}
+
+.hsl_input_text
+{
+    width: 2rem;
+}
+
+.hsl_input_range
+{
+    width: 8rem;
+}
+
+.color_test_item
+{
+    border: 1px solid gray;
+    width: fit-content;
+}

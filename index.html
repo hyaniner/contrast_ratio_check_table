@@ -5,51 +5,106 @@
         <link rel="stylesheet" href="index.css" />        
     </head>
     <body>
-        <div class="main_container" id="app_main_container">
+        <div class="header">
             <div clas="control_prime">
                 <button class="add_item" onclick="add_item()">Add</button>
             </div>
-            <div class="color_test_item">
-                <div class="color_display">
-                    ColorDisplay
+        </div>
+        <div class="main_container" id="app_main_container">
+            <div class="column_direction_container">
+                <div class="row_direction_container">
+                    <div class="item_conatiner">
+                        aaa
+                    </div>
+                    <div class="item_conatiner">
+                        bbb
+                    </div>
                 </div>
-                <div>
-                    rgb<input type="text" name="rgb">
+                <div class="row_direction_container">
+                    <div class="item_conatiner">
+                        ccc
+                    </div>
+                    <div class="item_conatiner">
+                        ddd
+                    </div>
                 </div>
-                <div>
-                    H<input class="hsl_input_text" type="text" name="hue">
-                    <input class="hsl_input_range" type="range" min = "-180" max = "180" step = "a" name = "hue_as_bar">
+            </div>
+            
+        </div>        
+        <div class="color_test_item standard_column">
+            <div class="color_display">
+                ColorDisplay
+            </div>
+            <div class="standard_row">
+                rgb<input class="input_rgb_text" type="text" name="rgb" data-item-index="0" data-sub-category="rgb" data-input-type="input_text" onchange="OnValueChanged(this)">
+            </div>
+            <div class="standard_column">
+                <div class="standard_row_vertical_align_top">
+                    <div class="hsl_label">
+                        H
+                    </div>
+                    <div class="standard_column">
+                        <div class="standard_row">
+                            <input class="hsl_input_text" type="text" name="hue"  data-item-index="0" data-sub-category="h" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <button class="hsl_button_add_sub hue_add" data-item-index="0" data-sub-category="h" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
+                            </button>
+                            <button class="hsl_button_add_sub hue_sub" data-item-index="0" data-sub-category="h" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                                -
+                            </button> 
+                        </div>
+                        <div class="standard_row">
+                            <input class="hsl_input_range" type="range" min = "0" max = "360" step = "a" name = "hue_as_bar" data-item-index="0" data-sub-category="h" data-input-type="input_range" onchange="OnValueChanged(this)">
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    S<input class="hsl_input_text" type="text" name="sat">
-                    <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar">
+            </div>
+
+            <div class="standard_column">
+                <div class="standard_row_vertical_align_top">
+                    <div class="hsl_label">
+                        S
+                    </div>
+                    <div class="standard_column">
+                        <div class="standard_row">
+                            <input class="hsl_input_text" type="text" name="sat" data-item-index="0" data-sub-category="s" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <button class="hsl_button_add_sub sat_add"  data-item-index="0" data-sub-category="s" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
+                            </button> 
+                            <button class="hsl_button_add_sub sat_sub"  data-item-index="0" data-sub-category="s" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                                -
+                            </button> 
+                        </div>
+                        <div class="standard_row">
+                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar"  data-item-index="0" data-sub-category="s" data-input-type="input_range" onchange="OnValueChanged(this)">
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    L<input class="hsl_input_text" type="text" name="lum">
-                    <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "lum_as_bar">
-                </div>
-                <div>
-                    <button class="hue_add">
-                        hue+
-                    </button> 
-                    <button class="hue_sub">
-                        hue-
-                    </button> 
-                    <button class="sat_add">
-                        sat+
-                    </button> 
-                    <button class="sat_sub">
-                        sat-
-                    </button> 
-                    <button class="lum_add">
-                        lum+
-                    </button> 
-                    <button class="lum_sub">
-                        lum-
-                    </button> 
+            </div>
+
+            <div class="standard_column">
+                <div class="standard_row_vertical_align_top">
+                    <div class="hsl_label">
+                        L
+                    </div>
+                    <div class="standard_column">
+                        <div class="standard_row">
+                            <input class="hsl_input_text" type="text" name="lum" data-item-index="0" data-sub-category="l" data-input-type="input_text" onchange="OnValueChanged(this)">
+                            <button class="hsl_button_add_sub lum_add" data-item-index="0" data-sub-category="l" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
+                            </button> 
+                            <button class="hsl_button_add_sub lum_sub" data-item-index="0" data-sub-category="l" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                                -
+                            </button> 
+                        </div>                    
+                        <div class="standard_row">
+                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "lum_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
 
         <script type="text/javascript" src="index.js" ></script>
     </body>

@@ -6,6 +6,11 @@
     justify-content: flex-start;
     align-items: flex-start;
     width: fit-content;
+    height: fit-content;
+}
+.input_rgb_text
+{
+    width: 4rem;
 }
 
 .hsl_input_text
@@ -18,8 +23,87 @@
     width: 8rem;
 }
 
+.hsl_label
+{
+    width: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hsl_button_add_sub
+{
+    width: 1.2rem;
+    text-align: center;
+    padding: 1px 1px;
+}
+
 .color_test_item
 {
     border: 1px solid gray;
+}
+
+.color_test_item.hidden
+{
+    display: none;
+}
+
+.column_direction_container
+{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     width: fit-content;
+    height: fit-content;
+}
+
+.row_direction_container
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: fit-content;
+    height: fit-content;
+}
+
+.item_conatiner
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.standard_row
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.standard_row_vertical_align_top
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    width: fit-content;
+    height: fit-content;
+}
+
+.standard_column
+{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: fit-content;
+    height: fit-content;
 }

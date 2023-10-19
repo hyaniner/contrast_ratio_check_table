@@ -21,14 +21,24 @@ function main_entry()
     for (let ButtonToWork of ButtonToReplaces)
     {
         ButtonToWork.dataset.itemIndex = ChangeTargetValue;
+        ButtonToWork.value = 0;
     }
     let InputToReplaces = new_node.querySelectorAll("input.hsl_input_text");
     for (let InputToWork of InputToReplaces)
     {
         InputToWork.dataset.itemIndex = ChangeTargetValue;
+        InputToWork.value = 0;
     }
     let InputRGB = new_node.querySelector("input.input_rgb_text");
     InputRGB.dataset.itemIndex = ChangeTargetValue;
+    InputRGB.value = "#" + "ff" + "2200";
+
+    const ColorVarName = "color:"
+    var ColorVarValue = InputRGB.value;
+    const BackgroundColorVarName = "background-color:"
+    const BackgroundVarValue = "#0000ff"
+    const styleResult = ColorVarName + ColorVarValue + ";" + BackgroundColorVarName + BackgroundVarValue + ";"
+    new_node.setAttribute('style', styleResult);
 
     document.body.appendChild(new_node);
 }

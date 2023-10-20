@@ -11,7 +11,6 @@ let LastMainContainerChild = undefined;
 
 let HSLArray = Array();
 let ColorManipulatorArray = Array();
-let ResultRowArray = Array();
 
 console.log(`hya`);
 main_entry();
@@ -78,13 +77,10 @@ function RefreshPage()
             let ForeColor = HslToHex(HSLArray[ColIndex]);
             
             Inner.style.backgroundColor = ForeColor;
-            Inner.style.color = BackgroundColor;
+            Inner.style.color = invertColor(ForeColor, true);
 
             ItemToAdd.style.backgroundColor = BackgroundColor;
-            ItemToAdd.style.color = ForeColor;
-            
-/*             //SetNodeColor(Inner, BackgroundColor, ForeColor);
-            SetNodeColor(ItemToAdd, ForeColor, BackgroundColor); */
+
             LastRow.appendChild(ItemToAdd);
         }
     }
@@ -202,11 +198,83 @@ function ReadHTMLResource(InSelector)
 
 function OnValueChanged(item)
 {
-    console.log(`${item}`);
+
     let Index = item.dataset.itemIndex;
     let subCategory = item.dataset.subCategory;
     let InputType = item.dataset.inputType;
     console.log(`Index: ${Index} / subCategory: ${subCategory} / InputType:${InputType}`);
+
+    let OldHSL = HSLArray[Index];
+    let ColorManipulator = ColorManipulatorArray[Index];
+
+    if (InputType === "button_delete")
+    {
+        console.log(`Index ${Index} button_delete`);
+    }
+    else if (InputType === "input_text")
+    {
+        if (subCategory === "rgb")
+        {
+            console.log(`Index ${Index} input_text, rgb`);
+        }
+        else if (subCategory === "h")
+        {
+            console.log(`Index ${Index} input_text, h`);
+        }
+        else if (subCategory === "s")
+        {
+            console.log(`Index ${Index} input_text, s`);
+        }
+        else if (subCategory === "l")
+        {
+            console.log(`Index ${Index} input_text, l`);
+        }
+    }
+    else if (InputType === "button_add")
+    {
+        if (subCategory === "h")
+        {
+            console.log(`Index ${Index} button_add, h`);
+        }
+        else if (subCategory === "s")
+        {
+            console.log(`Index ${Index} button_add, s`);
+        }
+        else if (subCategory === "l")
+        {
+            console.log(`Index ${Index} button_add, l`);
+        }
+    }
+    else if (InputType === "button_sub")
+    {
+        if (subCategory === "h")
+        {
+            console.log(`Index ${Index} button_sub, h`);
+        }
+        else if (subCategory === "s")
+        {
+            console.log(`Index ${Index} button_sub, s`);
+        }
+        else if (subCategory === "l")
+        {
+            console.log(`Index ${Index} button_sub, l`);
+        }
+    }
+    else if (InputType === "input_range")
+    {
+        if (subCategory === "h")
+        {
+            console.log(`Index ${Index} input_range, h`);
+        }
+        else if (subCategory === "s")
+        {
+            console.log(`Index ${Index} input_range, s`);
+        }
+        else if (subCategory === "l")
+        {
+            console.log(`Index ${Index} input_range, l`);
+        }
+    }
 }
 
 function ConvertRGBFromStringToObjectWithValidation(InRGBAsString)

@@ -1,38 +1,115 @@
+let ResourceColorManipulatorBase = undefined;
+let ResouceColumnContainerBase = undefined;
+let ResouceRowContainerBase = undefined;
+let ResouceItemContainerBase = undefined;
+let ResouceLeftUpCornerSpacerBase = undefined;
+let ResouceMainContainerChildBase = undefined;
+
+let MainContainer = undefined;
+
+let LastMainContainerChild = undefined;
+
+let HueArray = Array();
+let ColorManipulatorArray = Array();
+let ResultRowArray = Array();
+
 console.log(`hya`);
 main_entry();
+
+function main_entry()
+{
+    ReadyHTMLEnvironment();
+
+    let ItemZeroHex = "#000000";
+    let ItemZeroNode = GetNewColorManipulatorItemNode();
+    let ItemZeroHSL = InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHex);
+    ColorManipulatorArray.push(ItemZeroNode);
+    HueArray.push(ItemZeroHSL);
+
+    let ItemOneHex = "#ffffff";
+    let ItemOneNode = GetNewColorManipulatorItemNode();
+    let ItemOneHSL = InitializeNewColorManipulatorItem(ItemOneNode, ColorManipulatorArray.length, ItemOneHex);
+    ColorManipulatorArray.push(ItemOneNode);
+    HueArray.push(ItemOneHSL);
+
+
+    RefreshPage();
+    
+
+    /* let new_node = ResourceColorManipulatorBase.cloneNode(true);
+    InitializeNewItem(new_node, 1);
+    let some_value = "#" + "ff" + "2200";
+    SetNodeColor(new_node, some_value, "#0000FF");
+    document.body.appendChild(new_node); */
+}
+
+function RefreshPage()
+{
+    let NewFragment = document.createDocumentFragment();
+    let MainContainerChildContainerSource = ResouceMainContainerChildBase.cloneNode(true);
+    let MainContainerChildContainer = NewFragment.appendChild(MainContainerChildContainerSource);
+    let FirstRow = MainContainerChildContainer.appendChild(ResouceRowContainerBase.cloneNode(true));
+    FirstRow.appendChild(ResouceLeftUpCornerSpacerBase.cloneNode(true));
+    for (let ManipulatorItem of ColorManipulatorArray)
+    {
+        FirstRow.appendChild(ManipulatorItem.cloneNode(true));
+    }
+
+    let SecondRow = MainContainerChildContainer.appendChild(ResouceRowContainerBase.cloneNode(true));
+    let FirstColumnOfTable = SecondRow.appendChild(ResouceColumnContainerBase.cloneNode(true));
+    for (let ManipulatorItem of ColorManipulatorArray)
+    {
+        FirstColumnOfTable.appendChild(ManipulatorItem.cloneNode(true));
+    }
+
+    let SecondColumnOfTable = SecondRow.appendChild(ResouceColumnContainerBase.cloneNode(true));
+    for(let RowIndex = 0; RowIndex < ColorManipulatorArray.length ; RowIndex++)
+    {
+        let LastRow = SecondColumnOfTable.appendChild(ResouceRowContainerBase.cloneNode(true));
+        for(let ColIndex = 0; ColIndex < ColorManipulatorArray.length ; ColIndex++)
+        {
+            let ItemToAdd = ResouceItemContainerBase.cloneNode(true);
+            ItemToAdd.textContent = "Row" + RowIndex + "/Col:" + ColIndex;
+            LastRow.appendChild(ItemToAdd);
+        }
+    }
+
+    MainContainer.replaceChild(NewFragment, LastMainContainerChild);
+    LastMainContainerChild = MainContainer.querySelector("div.main_container_only_child");    
+}
+
+function GetNewColorManipulatorItemNode()
+{
+    return ResourceColorManipulatorBase.cloneNode(true);
+}
 
 function add_item()
 {
     console.log(`hya2`);
-/*     let main_container = document.getElementById("app_main_container");
-    let node = document.querySelector("div.color_test_item");
-    console.log(`hya3: ${node}`);
-    let new_node = node.cloneNode(true);
-    main_container.appendChild(new_node); */
 }
 
-function InitializeNewItem(itemToWork, newIndex)
+function InitializeNewColorManipulatorItem(ItemToWork, NewIndex, InitialColorAsHex)
 {
-    let ButtonToReplaces = itemToWork.querySelectorAll("button.hsl_button_add_sub");    
+    let ButtonToReplaces = ItemToWork.querySelectorAll("button.hsl_button_add_sub");    
     for (let ButtonToWork of ButtonToReplaces)
     {
-        ButtonToWork.dataset.itemIndex = newIndex;
+        ButtonToWork.dataset.itemIndex = NewIndex;
         //ButtonToWork.value = 0;
     }
-    let InputToReplaces = itemToWork.querySelectorAll("input.hsl_input_text");
+    let InputToReplaces = ItemToWork.querySelectorAll("input.hsl_input_text");
     for (let InputToWork of InputToReplaces)
     {
-        InputToWork.dataset.itemIndex = newIndex;
+        InputToWork.dataset.itemIndex = NewIndex;
         //InputToWork.value = 0;
     }
-    let InputRGB = itemToWork.querySelector("input.input_rgb_text");
-    InputRGB.dataset.itemIndex = newIndex;    
+    let InputRGB = ItemToWork.querySelector("input.input_rgb_text");
+    InputRGB.dataset.itemIndex = NewIndex;    
 
-    let DeleteButton = itemToWork.querySelector("button.delete_button");
-    DeleteButton.dataset.itemIndex = newIndex;
+    let DeleteButton = ItemToWork.querySelector("button.delete_button");
+    DeleteButton.dataset.itemIndex = NewIndex;
 
 
-    InputRGB.value = "#ffeecc";
+    InputRGB.value = InitialColorAsHex;
     let RGBValidationResult = ConvertRGBFromStringToObjectWithValidation(InputRGB.value);
 
     let RGBPart = RGBValidationResult.RGB;
@@ -43,25 +120,21 @@ function InitializeNewItem(itemToWork, newIndex)
     if(ValidationPart === true)
     {
         HSL = rgbToHSL(RGBPart);
-        console.log(`H:${HSL.h}`);
-        console.log(`S:${HSL.s}`);
-        console.log(`L:${HSL.l}`);
     }
     else
     {
         console.log(`fail`);
     }
 
-    itemToWork.querySelector
-    let InputTextHue = itemToWork.querySelector("input.hsl_input_text.hue_part");
+    let InputTextHue = ItemToWork.querySelector("input.hsl_input_text.hue_part");
     InputTextHue.value = HSL.h;
-    let InputTextSat = itemToWork.querySelector("input.hsl_input_text.sat_part");
+    let InputTextSat = ItemToWork.querySelector("input.hsl_input_text.sat_part");
     InputTextSat.value = HSL.s;
-    let InputTextLight = itemToWork.querySelector("input.hsl_input_text.light_part");
+    let InputTextLight = ItemToWork.querySelector("input.hsl_input_text.light_part");
     InputTextLight.value = HSL.l;
+
+    return HSL;
 }
-
-
 
 function SetNodeColor(NodeItemToWork, NewColor, NewBackgroundColor)
 {
@@ -73,18 +146,39 @@ function SetNodeColor(NodeItemToWork, NewColor, NewBackgroundColor)
     NodeItemToWork.setAttribute('style', styleResult);
 }
 
-function main_entry()
+function ReadyHTMLEnvironment()
 {
-    let ItemToHide = document.querySelector("div.color_test_item");
-    let new_node = ItemToHide.cloneNode(true);
+    let ColorManipulator = document.querySelector("div.color_manipulate_item.primitive_item");
+    let ColorManipulatorWidth = ColorManipulator.getBoundingClientRect().width;
+    let ColorManipulatorHeight = ColorManipulator.getBoundingClientRect().height;
 
-    InitializeNewItem(new_node, 1);
+    ResourceColorManipulatorBase = ReadHTMLResource("div.color_manipulate_item.primitive_item");
+    
+    let cornerSource = document.querySelector("div.left_up_corner_spacer.primitive_item");
+    cornerSource.style.width = `${ColorManipulatorWidth}px`;
 
-    let some_value = "#" + "ff" + "2200";
+    ResouceLeftUpCornerSpacerBase = ReadHTMLResource("div.left_up_corner_spacer.primitive_item");
+    ResouceColumnContainerBase = ReadHTMLResource("div.column_direction_container.primitive_item");
+    ResouceRowContainerBase = ReadHTMLResource("div.row_direction_container.primitive_item");
 
-    SetNodeColor(new_node, some_value, "#0000FF");
+    let ItemConainer = document.querySelector("div.item_conatiner.primitive_item");
+    ItemConainer.style.width = `${ColorManipulatorWidth}px`;
+    ItemConainer.style.height = `${ColorManipulatorHeight}px`;
 
-    document.body.appendChild(new_node);
+    ResouceItemContainerBase = ReadHTMLResource("div.item_conatiner.primitive_item");
+    ResouceMainContainerChildBase = ReadHTMLResource("div.main_container_only_child.primitive_item");
+
+    MainContainer = document.getElementById("app_main_container");
+    LastMainContainerChild = document.querySelector("div.main_container_only_child.initial_item");
+}
+
+function ReadHTMLResource(InSelector)
+{
+    let Readed = document.querySelector(InSelector);
+    let Cloned = Readed.cloneNode(true)
+    Cloned.classList.remove("primitive_item");    
+    Readed.classList.add("hidden");
+    return Cloned;
 }
 
 function OnValueChanged(item)
@@ -95,7 +189,6 @@ function OnValueChanged(item)
     let InputType = item.dataset.inputType;
     console.log(`Index: ${Index} / subCategory: ${subCategory} / InputType:${InputType}`);
 }
-
 
 function ConvertRGBFromStringToObjectWithValidation(InRGBAsString)
 {
@@ -143,7 +236,6 @@ function hexToRgb(hex) {
  * @returns {[number, number, number]} H, S, L 값 배열
  */
 function rgbToHSL(rgb) {
-    console.log(`rgb is ok?${rgb}`);
     const r = (rgb.r) / 255;
     const g = (rgb.g) / 255;
     const b = (rgb.b) / 255;

@@ -71,15 +71,23 @@ function RefreshPage()
         {
             let ItemToAdd = ResouceItemContainerBase.cloneNode(true);
             let Inner = ItemToAdd.querySelector("div.item_container_inner");
-            Inner.textContent = "Row" + RowIndex + "/Col:" + ColIndex;
             
-            let BackgroundColor = HslToHex(HSLArray[RowIndex]);
-            let ForeColor = HslToHex(HSLArray[ColIndex]);
-            
-            Inner.style.backgroundColor = ForeColor;
-            Inner.style.color = invertColor(ForeColor, true);
+            let BackgroundColorRGB = hslToRGB(HSLArray[RowIndex]);            
+            let BackgroundColorHex = RGBToHex(BackgroundColorRGB);
 
-            ItemToAdd.style.backgroundColor = BackgroundColor;
+            let ForeColorRGB = hslToRGB(HSLArray[ColIndex]);
+            let ForeColorHex = RGBToHex(ForeColorRGB);
+
+            let ContrastRatio = GetContrastRatio(BackgroundColorRGB, ForeColorRGB);
+
+            
+
+            Inner.textContent = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(ContrastRatio);
+
+            Inner.style.backgroundColor = ForeColorHex;
+            Inner.style.color = invertColor(ForeColorHex, true);
+
+            ItemToAdd.style.backgroundColor = BackgroundColorHex;
 
             LastRow.appendChild(ItemToAdd);
         }
@@ -595,4 +603,41 @@ function invertColor(hex, bw) {
     b = (255 - b).toString(16);
     // pad each with zeros and return
     return "#" + padZero(r) + padZero(g) + padZero(b);
+}
+
+//https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o
+function luminance(RGB) {
+    const r = RGB.r;
+    const g = RGB.g
+    const b = RGB.b
+    var a = [r, g, b].map(function (v) {
+        v /= 255;
+        return v <= 0.03928
+            ? v / 12.92
+            : Math.pow( (v + 0.055) / 1.055, 2.4 );
+    });
+    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+//https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o
+function GetContrastRatioWithinLuminances(lum1, lum2)
+{
+    const ratio = lum1 > lum2 
+    ? ((lum1 + 0.05) / (lum2 + 0.05))
+    : ((lum2 + 0.05) / (lum1 + 0.05));
+
+    return ratio;
+}
+
+function GetContrastRatio(FirstRGB, SecondRGB)
+{
+    const Lum1 = luminance(FirstRGB);
+    const Lum2 = luminance(SecondRGB);    
+    console.log(`Lum1: ${Lum1}, Lum2" ${Lum2}`);
+    let ResultBeforeRound = GetContrastRatioWithinLuminances(Lum1, Lum2);
+    console.log(`ResultBeforeRound: ${ResultBeforeRound}`);
+    let ResultBeforeRoundMultipliedBy100 = ResultBeforeRound * 100;
+    let ResultRoundedButStillMultipliedBy100 = Math.round(ResultBeforeRoundMultipliedBy100); 
+    let ResultRouned = ResultRoundedButStillMultipliedBy100 / 100;
+    return ResultRouned;
 }

@@ -61,6 +61,8 @@ function main_entry()
 
     let ItemZeroHex = "#000000";
     let ItemZeroHSL = HexToHSL(ItemZeroHex);
+    console.log(`main_entry::HSL?:${ItemZeroHSL.h},${ItemZeroHSL.s},${ItemZeroHSL.l}`);
+    
     let ItemZeroNode = GetNewColorManipulatorItemNode();
     InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHSL);
     ColorManipulatorArray.push(ItemZeroNode);
@@ -194,7 +196,11 @@ function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
     
     let InputRGB = ItemToWork.querySelector("input.input_rgb_text");
     
-    InputRGB.value = HslToHex(HSL);
+    console.log(`HSL?:${HSL.h},${HSL.s},${HSL.l}`);
+
+    let AsHex = HslToHex(HSL);
+    console.log(`HSL-HexConverted: ${AsHex}`);
+    InputRGB.value = AsHex
 
     ItemToWork.querySelector("input.hsl_input_text.hue_part").value = HSL.h;    
     ItemToWork.querySelector("input.hsl_input_range.hue_part").value = HSL.h;
@@ -284,14 +290,18 @@ function OnValueChanged(item)
             let NewHex = item.value;
             console.log(`NewValue:${NewHex}`);
             let RGBConvertResult = HexToRGBWithValidation(NewHex);
+            console.log(`RGBConvertResult: ${RGBConvertResult.Valid}`);
             if(RGBConvertResult.Valid !== true)
             {
                 OldRGB = ColorManipulator.querySelector("input.input_rgb_text").value;
                 item.value = OldRGB;
+                console.log(`안돼여긴`);
             }
             else
             {
                 let NewHSL = rgbToHSL(RGBConvertResult.RGB);
+                console.log(`NewHex ${NewHex} asRGB: ${RGBConvertResult.RGB.r},${RGBConvertResult.RGB.g},${RGBConvertResult.RGB.b} asHSL:${NewHSL.h},${NewHSL.s},${NewHSL.l}`);
+
                 ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
             }
         }
@@ -515,33 +525,51 @@ function hexToRgb(hex) {
 }
 
 /**
- * 2차 출처: https://www.30secondsofcode.org/js/s/rgb-to-hsl/
- * 1차 출처: https://solo5star.tistory.com/41
- * 입출력을 배열에서 오브젝트로 변경
+ * https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion/9493060#9493060
+ * 입출력 변경
  */
 function rgbToHSL(rgb) {
+    
     const r = (rgb.r) / 255;
     const g = (rgb.g) / 255;
     const b = (rgb.b) / 255;
-    const l = Math.max(r, g, b);
-    const s = l - Math.min(r, g, b);
+    
+    const vmax = Math.max(r, g, b), vmin = Math.min(r, g, b);
+    let h, s, l = (vmax + vmin) / 2;
   
-    const h = s
-      ? l === r
-        ? (g - b) / s
-        : l === g
-        ? 2 + (b - r) / s
-        : 4 + (r - g) / s
-      : 0;
-    let hslBeforeNormalize = {
-        h: (60 * h < 0 ? 60 * h + 360 : 60 * h),
-        s: (100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0)),
-        l: ((100 * (2 * l - s)) / 2),
-      };
+    /* 여기도 반환 있어요 */
+    if (vmax === vmin) {
+        return {
+            h: 0*360,
+            s: 0*100,
+            l: l*100
+        };
+    }
+  
 
+    const d = vmax - vmin;
+    s = l > 0.5 ? d / (2 - vmax - vmin) : d / (vmax + vmin);
+    if (vmax === r) h = (g - b) / d + (g < b ? 6 : 0);
+    if (vmax === g) h = (b - r) / d + 2;
+    if (vmax === b) h = (r - g) / d + 4;
+    h /= 6;
+
+    
+  
+    let hslBeforeNormalize = {
+        h: h*360,
+        s: s*100,
+        l: l*100
+    };
+
+    console.log(`hslBeforeNormalize: ${hslBeforeNormalize.h}, ${hslBeforeNormalize.s}, ${hslBeforeNormalize.l}`);
     let hslAfterNormalize = normalizeHSL(hslBeforeNormalize);
 
+    console.log(`hslAfterNormalize: ${hslAfterNormalize.h}, ${hslAfterNormalize.s}, ${hslAfterNormalize.l}`);
     return hslAfterNormalize;
+
+
+
 }
 
 /**
@@ -601,7 +629,10 @@ function hslToRGB(hsl) {
 
 function HexToHSL(Hex)
 {
-    return rgbToHSL(hexToRgb(Hex));
+    let RGB = hexToRgb(Hex);
+    let HSL = rgbToHSL(RGB);
+    console.log(`HexToHSL 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);
+    return HSL;
 }
 
 //https://www.delftstack.com/ko/howto/javascript/rgb-to-hex-javascript/
@@ -622,7 +653,10 @@ function RGBToHex(RGB)
 
 function HslToHex(HSL)
 {
-    return RGBToHex(hslToRGB(HSL));
+    const RGB = hslToRGB(HSL);
+    const Hex = RGBToHex(RGB);
+    console.log(`HslToHex 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);
+    return Hex;
 }
 
 //https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color

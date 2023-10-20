@@ -143,7 +143,8 @@ function RefreshPage()
             
 
             Inner.style.backgroundColor = ForeColorHex;
-            Inner.style.color = invertColor(ForeColorHex, true);
+            //Inner.style.color = invertColor(ForeColorHex, true);
+            Inner.style.color = BackgroundColorHex;
 
             ItemToAdd.style.backgroundColor = BackgroundColorHex;
 
@@ -211,14 +212,19 @@ function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
     console.log(`HSL-HexConverted: ${AsHex}`);
     InputRGB.value = AsHex
 
-    ItemToWork.querySelector("input.hsl_input_text.hue_part").value = HSL.h;    
-    ItemToWork.querySelector("input.hsl_input_range.hue_part").value = HSL.h;
-    
-    ItemToWork.querySelector("input.hsl_input_text.sat_part").value = HSL.s;
-    ItemToWork.querySelector("input.hsl_input_range.sat_part").value = HSL.s;
+    let HRounded =  (Math.round(HSL.h * 10))/10;
+    let SRounded =  (Math.round(HSL.s * 10))/10;
+    let LRounded =  (Math.round(HSL.l * 10))/10;
 
-    ItemToWork.querySelector("input.hsl_input_text.light_part").value = HSL.l;
-    ItemToWork.querySelector("input.hsl_input_range.light_part").value = HSL.l;
+
+    ItemToWork.querySelector("input.hsl_input_text.hue_part").value = HRounded;    
+    ItemToWork.querySelector("input.hsl_input_range.hue_part").value = HRounded;
+    
+    ItemToWork.querySelector("input.hsl_input_text.sat_part").value = SRounded;
+    ItemToWork.querySelector("input.hsl_input_range.sat_part").value = SRounded;
+
+    ItemToWork.querySelector("input.hsl_input_text.light_part").value = LRounded;
+    ItemToWork.querySelector("input.hsl_input_range.light_part").value = LRounded;
 }
 
 function ApplyColorToColorManipulator(ItemToWork, HSL)

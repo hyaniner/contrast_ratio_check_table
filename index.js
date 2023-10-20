@@ -146,7 +146,7 @@ function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
 
 function ApplyColorToColorManipulator(ItemToWork, HSL)
 {
-    let AsHex = HslToHex(HSL);
+    let AsHex = HslToHex(HSL);    
     let InvertedColor = invertColor(AsHex, true);
     SetNodeColor(ItemToWork, InvertedColor, AsHex);
 }
@@ -199,23 +199,23 @@ function ReadHTMLResource(InSelector)
 function OnValueChanged(item)
 {
 
-    let Index = item.dataset.itemIndex;
+    let IndexToWork = item.dataset.itemIndex;
     let subCategory = item.dataset.subCategory;
     let InputType = item.dataset.inputType;
-    console.log(`Index: ${Index} / subCategory: ${subCategory} / InputType:${InputType}`);
+    console.log(`Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType}`);
 
-    let OldHSL = HSLArray[Index];
-    let ColorManipulator = ColorManipulatorArray[Index];
+    let OldHSL = HSLArray[IndexToWork];
+    let ColorManipulator = ColorManipulatorArray[IndexToWork];
 
     if (InputType === "button_delete")
     {
-        console.log(`Index ${Index} button_delete`);
+        console.log(`Index ${IndexToWork} button_delete`);
     }
     else if (InputType === "input_text")
     {
         if (subCategory === "rgb")
         {
-            console.log(`Index ${Index} input_text, rgb`);
+            console.log(`Index ${IndexToWork} input_text, rgb`);
             let NewHex = item.value;
             console.log(`NewValue:${NewHex}`);
             let RGBConvertResult = HexToRGBWithValidation(NewHex);
@@ -227,70 +227,89 @@ function OnValueChanged(item)
             else
             {
                 let NewHSL = rgbToHSL(RGBConvertResult.RGB);
-                HSLArray.splice(Index, 1, NewHSL);
-                SetColorMainpulatorItemInputValue(ColorManipulator, NewHSL);
-                ApplyColorToColorManipulator(ColorManipulator, NewHSL);
-                RefreshPage();
+                ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
             }
         }
-        else if (subCategory === "h")
+        else 
         {
-            console.log(`Index ${Index} input_text, h`);
+            let NewHSL = undefined;
+            if (subCategory === "h")
+            {
+                console.log(`Index ${IndexToWork} input_text, h`);
+                let NewH = item.value;
+                NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
+            }
+            else if (subCategory === "s")
+            {
+                console.log(`Index ${IndexToWork} input_text, s`);
+                let NewS = item.value;
+                NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
+            }
+            else if (subCategory === "l")
+            {
+                console.log(`Index ${IndexToWork} input_text, l`);
+                let NewL = item.value;
+                NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
+            }
+            ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
         }
-        else if (subCategory === "s")
-        {
-            console.log(`Index ${Index} input_text, s`);
-        }
-        else if (subCategory === "l")
-        {
-            console.log(`Index ${Index} input_text, l`);
-        }
+        
     }
     else if (InputType === "button_add")
     {
         if (subCategory === "h")
         {
-            console.log(`Index ${Index} button_add, h`);
+            console.log(`Index ${IndexToWork} button_add, h`);
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${Index} button_add, s`);
+            console.log(`Index ${IndexToWork} button_add, s`);
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${Index} button_add, l`);
+            console.log(`Index ${IndexToWork} button_add, l`);
         }
     }
     else if (InputType === "button_sub")
     {
         if (subCategory === "h")
         {
-            console.log(`Index ${Index} button_sub, h`);
+            console.log(`Index ${IndexToWork} button_sub, h`);
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${Index} button_sub, s`);
+            console.log(`Index ${IndexToWork} button_sub, s`);
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${Index} button_sub, l`);
+            console.log(`Index ${IndexToWork} button_sub, l`);
         }
     }
     else if (InputType === "input_range")
     {
         if (subCategory === "h")
         {
-            console.log(`Index ${Index} input_range, h`);
+            console.log(`Index ${IndexToWork} input_range, h`);
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${Index} input_range, s`);
+            console.log(`Index ${IndexToWork} input_range, s`);
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${Index} input_range, l`);
+            console.log(`Index ${IndexToWork} input_range, l`);
         }
     }
+}
+
+function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
+{
+    let ColorManipulator = ColorManipulatorArray[Index];
+
+    HSLArray.splice(Index, 1, NewHSL);
+    SetColorMainpulatorItemInputValue(ColorManipulator, NewHSL);
+    ApplyColorToColorManipulator(ColorManipulator, NewHSL);
+    RefreshPage();
 }
 
 function HexToRGBWithValidation(Hex)
@@ -385,10 +404,30 @@ function hslToRGB(hsl) {
     const a = s * Math.min(l, 1 - l);
     const f = (n) =>
       l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+
+    let rPart = Math.round(255 * f(0));
+    let gPart = Math.round(255 * f(8));
+    let bPart = Math.round(255 * f(4));
+
+    if(rPart > 255)
+    {
+        rPart = 255;
+    }
+
+    if(gPart > 255)
+    {
+        gPart = 255;
+    }
+
+    if(bPart > 255)
+    {
+        bPart = 255;
+    }
+
     return {
-        r: 255 * f(0), 
-        g: 255 * f(8),
-        b: 255 * f(4)
+        r: rPart, 
+        g: gPart,
+        b: bPart
     };
   }
 
@@ -435,6 +474,7 @@ function invertColor(hex, bw) {
         hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
     }
     if (hex.length !== 6) {
+        console.log(`Invalid HEX color: ${hex}`);
         throw new Error('Invalid HEX color.');
     }
     var r = parseInt(hex.slice(0, 2), 16),

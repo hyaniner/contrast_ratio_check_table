@@ -114,7 +114,7 @@ function InitializeNewColorManipulatorItemStructure(ItemToWork, NewIndex)
         ButtonToWork.dataset.itemIndex = NewIndex;
         //ButtonToWork.value = 0;
     }
-    let InputToReplaces = ItemToWork.querySelectorAll("input.hsl_input_text");
+    let InputToReplaces = ItemToWork.querySelectorAll("input.hsl_input_text, input.hsl_input_range");
     for (let InputToWork of InputToReplaces)
     {
         InputToWork.dataset.itemIndex = NewIndex;
@@ -233,72 +233,175 @@ function OnValueChanged(item)
         else 
         {
             let NewHSL = undefined;
-            if (subCategory === "h")
+            let RangeOverflowed = false;
+
+            let asNum = Number.parseInt(item.value, 10);            
+            let IsInt = !(Number.isNaN(asNum));
+            console.log(`asnum : ${asNum} and IsInt:${IsInt}`);
+            if(IsInt)
             {
-                console.log(`Index ${IndexToWork} input_text, h`);
-                let NewH = item.value;
-                NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
+                if (subCategory === "h")
+                {
+                    console.log(`Index ${IndexToWork} input_text, h`);
+                    let NewH = asNum;
+                    if(NewH > 360 || NewH < 0)
+                    {
+                        NewH = (((Math.round(NewH) % 360) + 360) % 360);
+                    }
+                    NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
+                    console.log(`NewH:${NewH}`);
+                }
+                else if (subCategory === "s")
+                {
+                    console.log(`Index ${IndexToWork} input_text, s`);
+                    let NewS = asNum;
+                    if(NewS > 100 || NewS < 0)
+                    {
+                        RangeOverflowed = true;
+                    }
+                    else
+                    {
+                        NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
+                    }
+                }
+                else if (subCategory === "l")
+                {
+                    console.log(`Index ${IndexToWork} input_text, l`);
+                    let NewL = asNum;
+                    if(NewL > 100 || NewL < 0)
+                    {
+                        RangeOverflowed = true;
+                    }
+                    else
+                    {
+                        NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
+                    }
+                }
             }
-            else if (subCategory === "s")
+
+            if(RangeOverflowed === false && IsInt)
             {
-                console.log(`Index ${IndexToWork} input_text, s`);
-                let NewS = item.value;
-                NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
+                ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
             }
-            else if (subCategory === "l")
+            else
             {
-                console.log(`Index ${IndexToWork} input_text, l`);
-                let NewL = item.value;
-                NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
+                if (subCategory === "h")
+                {
+                    item.value = OldHSL.h;
+                }
+                else if (subCategory === "s")
+                {
+                    item.value = OldHSL.s;
+                }
+                else if (subCategory === "l")
+                {
+                    item.value = OldHSL.l;
+                }
             }
-            ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
+            
         }
         
     }
-    else if (InputType === "button_add")
+    else if (InputType === "button_add" || InputType === "button_sub")
     {
+        let NewHSL = undefined;
+        let RangeOverflowed = false;
         if (subCategory === "h")
         {
-            console.log(`Index ${IndexToWork} button_add, h`);
+            console.log(`Index ${IndexToWork} button_add/sub, h`);
+            let NewH = undefined;
+            if(InputType === "button_add")
+            {
+                NewH = OldHSL.h + 1;
+            }
+            else
+            {
+                NewH = OldHSL.h - 1;
+            }
+            
+            if(NewH > 360 || NewH < 0)
+            {
+                NewH = (((Math.round(NewH) % 360) + 360) % 360);
+            }            
+            NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
+            
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${IndexToWork} button_add, s`);
+            console.log(`Index ${IndexToWork} button_add/sub, s`);
+            let NewS = undefined;
+            if(InputType === "button_add")
+            {
+                NewS = OldHSL.s + 1;
+            }
+            else
+            {
+                NewS = OldHSL.s - 1;
+            }
+            
+            if(NewS > 100 || NewS < 0)
+            {
+                RangeOverflowed = true;
+            }
+            else
+            {
+                NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
+            }
+            
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${IndexToWork} button_add, l`);
+            console.log(`Index ${IndexToWork} button_add/sub, l`);
+            let NewL = undefined;
+            if(InputType === "button_add")
+            {
+                NewL = OldHSL.l + 1;
+            }
+            else
+            {
+                NewL = OldHSL.l - 1;
+            }
+
+            if(NewL > 100 || NewL < 0)
+            {
+                RangeOverflowed = true;
+            }
+            else
+            {
+                NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
+            }
+            
         }
-    }
-    else if (InputType === "button_sub")
-    {
-        if (subCategory === "h")
+
+        if(RangeOverflowed === false)
         {
-            console.log(`Index ${IndexToWork} button_sub, h`);
-        }
-        else if (subCategory === "s")
-        {
-            console.log(`Index ${IndexToWork} button_sub, s`);
-        }
-        else if (subCategory === "l")
-        {
-            console.log(`Index ${IndexToWork} button_sub, l`);
+            NewHSL = normalizeHSL(NewHSL);
+            ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
         }
     }
     else if (InputType === "input_range")
     {
+        let NewHSL = undefined;
         if (subCategory === "h")
         {
             console.log(`Index ${IndexToWork} input_range, h`);
+            let NewH = item.value;
+            NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
         }
         else if (subCategory === "s")
         {
             console.log(`Index ${IndexToWork} input_range, s`);
+            let NewS = item.value;
+            NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
         }
         else if (subCategory === "l")
         {
             console.log(`Index ${IndexToWork} input_range, l`);
+            let NewL = item.value;
+            NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
         }
+        NewHSL = normalizeHSL(NewHSL);
+        ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
     }
 }
 

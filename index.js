@@ -216,6 +216,22 @@ function OnValueChanged(item)
         if (subCategory === "rgb")
         {
             console.log(`Index ${Index} input_text, rgb`);
+            let NewHex = item.value;
+            console.log(`NewValue:${NewHex}`);
+            let RGBConvertResult = HexToRGBWithValidation(NewHex);
+            if(RGBConvertResult.Valid !== true)
+            {
+                OldRGB = ColorManipulator.querySelector("input.input_rgb_text").value;
+                item.value = OldRGB;
+            }
+            else
+            {
+                let NewHSL = rgbToHSL(RGBConvertResult.RGB);
+                HSLArray.splice(Index, 1, NewHSL);
+                SetColorMainpulatorItemInputValue(ColorManipulator, NewHSL);
+                ApplyColorToColorManipulator(ColorManipulator, NewHSL);
+                RefreshPage();
+            }
         }
         else if (subCategory === "h")
         {
@@ -277,9 +293,9 @@ function OnValueChanged(item)
     }
 }
 
-function ConvertRGBFromStringToObjectWithValidation(InRGBAsString)
+function HexToRGBWithValidation(Hex)
 {
-    let RGBReulst = hexToRgb(InRGBAsString);
+    let RGBReulst = hexToRgb(Hex);
     let ValidResult = undefined;
     if(RGBReulst != null)
     {
@@ -294,12 +310,6 @@ function ConvertRGBFromStringToObjectWithValidation(InRGBAsString)
         Valid: ValidResult,
         RGB: RGBReulst
     }
-}
-
-function ReadRGB(InNodeItemToWork, OutRGB)
-{
-    let RGBAsString = InNodeItemToWork.querySelector("input_rgb_text").value;
-    return hexToRgb(RGBAsString);
 }
 
 //https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o

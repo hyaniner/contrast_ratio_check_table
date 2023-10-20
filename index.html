@@ -32,7 +32,7 @@
             
         </div>
 
-        
+
         <div class="column_direction_container primitive_item">
 
         </div>
@@ -40,8 +40,15 @@
 
         </div>
         <div class="color_test_item primitive_item standard_column">
-            <div class="color_display">
-                ColorDisplay
+            <div class="standard_row stretch_container">
+                <div class="standard_row stretch_else">
+                    ColorDisplay
+                </div>
+                <div class="standard_row" style="flex:0 0 auto;">
+                    <button class="delete_button" data-item-index="0" data-sub-category="all" data-input-type="button_delete" onclick="OnValueChanged(this)">
+                        Del
+                    </button>
+                </div>
             </div>
             <div class="standard_row">
                 rgb<input class="input_rgb_text" type="text" name="rgb" data-item-index="0" data-sub-category="rgb" data-input-type="input_text" onchange="OnValueChanged(this)">
@@ -53,7 +60,7 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text" type="text" name="hue"  data-item-index="0" data-sub-category="h" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <input class="hsl_input_text hue_part" type="text" name="hue"  data-item-index="0" data-sub-category="h" data-input-type="input_text" onchange="OnValueChanged(this)">                
                             <button class="hsl_button_add_sub hue_add" data-item-index="0" data-sub-category="h" data-input-type="button_add" onclick="OnValueChanged(this)">
                                 +
                             </button>
@@ -75,7 +82,7 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text" type="text" name="sat" data-item-index="0" data-sub-category="s" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <input class="hsl_input_text sat_part" type="text" name="sat" data-item-index="0" data-sub-category="s" data-input-type="input_text" onchange="OnValueChanged(this)">                
                             <button class="hsl_button_add_sub sat_add"  data-item-index="0" data-sub-category="s" data-input-type="button_add" onclick="OnValueChanged(this)">
                                 +
                             </button> 
@@ -97,16 +104,16 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text" type="text" name="lum" data-item-index="0" data-sub-category="l" data-input-type="input_text" onchange="OnValueChanged(this)">
-                            <button class="hsl_button_add_sub lum_add" data-item-index="0" data-sub-category="l" data-input-type="button_add" onclick="OnValueChanged(this)">
+                            <input class="hsl_input_text light_part" type="text" name="lum" data-item-index="0" data-sub-category="l" data-input-type="input_text" onchange="OnValueChanged(this)">
+                            <button class="hsl_button_add_sub light_add" data-item-index="0" data-sub-category="l" data-input-type="button_add" onclick="OnValueChanged(this)">
                                 +
                             </button> 
-                            <button class="hsl_button_add_sub lum_sub" data-item-index="0" data-sub-category="l" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                            <button class="hsl_button_add_sub light_sub" data-item-index="0" data-sub-category="l" data-input-type="button_sub" onclick="OnValueChanged(this)">
                                 -
                             </button> 
                         </div>                    
                         <div class="standard_row">
-                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "lum_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "light_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>

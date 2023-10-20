@@ -44,15 +44,24 @@ function paste_from_clipboard()
     }
 
     HSLArray.splice(0, HSLArray.length);
-    ColorManipulatorArray.splice(0, ColorManipulatorArray.length);
     for (let HSLItem of HSLItems)
+    {
+        HSLArray.push(HSLItem);
+    }
+    
+    ColorManipulatorArray.splice(0, ColorManipulatorArray.length);
+    RebuildColorManipulatorArrayFromHSLArray();
+    RefreshPage();
+}
+
+function RebuildColorManipulatorArrayFromHSLArray()
+{
+    for (let HSLItem of HSLArray)
     {
         let ItemZeroNode = GetNewColorManipulatorItemNode();
         InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, HSLItem);
         ColorManipulatorArray.push(ItemZeroNode);
-        HSLArray.push(HSLItem);
     }
-    RefreshPage();
 }
 
 function main_entry()
@@ -279,7 +288,8 @@ function OnValueChanged(item)
     {
         console.log(`Index ${IndexToWork} button_delete`);
         HSLArray.splice(IndexToWork, 1);
-        ColorManipulatorArray.splice(IndexToWork, 1);
+        ColorManipulatorArray.splice(0, ColorManipulatorArray.length);
+        RebuildColorManipulatorArrayFromHSLArray();
         RefreshPage();
     }
     else if (InputType === "input_text")
@@ -556,20 +566,14 @@ function rgbToHSL(rgb) {
 
     
   
-    let hslBeforeNormalize = {
+    let HSLResult = {
         h: h*360,
         s: s*100,
         l: l*100
     };
 
-    console.log(`hslBeforeNormalize: ${hslBeforeNormalize.h}, ${hslBeforeNormalize.s}, ${hslBeforeNormalize.l}`);
-    let hslAfterNormalize = normalizeHSL(hslBeforeNormalize);
-
-    console.log(`hslAfterNormalize: ${hslAfterNormalize.h}, ${hslAfterNormalize.s}, ${hslAfterNormalize.l}`);
-    return hslAfterNormalize;
-
-
-
+    console.log(`hslBeforeNormalize: ${HSLResult.h}, ${HSLResult.s}, ${HSLResult.l}`);
+    return HSLResult;
 }
 
 /**

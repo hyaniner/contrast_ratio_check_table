@@ -15,6 +15,46 @@ let ColorManipulatorArray = Array();
 console.log(`hya`);
 main_entry();
 
+function copy_to_clipboard()
+{
+    let ItemsToCopy = Array();
+    for (let HSL of HSLArray)
+    {
+        let Hex = HslToHex(HSL);
+        ItemsToCopy.push(Hex);
+    }
+    let StringToCopy = ItemsToCopy.join(",");
+    navigator.clipboard.writeText(StringToCopy);
+}
+
+function paste_from_clipboard()
+{
+    let String = document.querySelector("input.paste_source").value;    
+    let HexItems = String.split(',');
+    let HSLItems = Array();
+    for (let HexItem of HexItems)
+    {
+        
+        let HSLItem = HexToHSL(HexItem);
+        if(HSLItem == null)
+        {
+            break;
+        }
+        HSLItems.push(HSLItem);
+    }
+
+    HSLArray.splice(0, HSLArray.length);
+    ColorManipulatorArray.splice(0, ColorManipulatorArray.length);
+    for (let HSLItem of HSLItems)
+    {
+        let ItemZeroNode = GetNewColorManipulatorItemNode();
+        InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, HSLItem);
+        ColorManipulatorArray.push(ItemZeroNode);
+        HSLArray.push(HSLItem);
+    }
+    RefreshPage();
+}
+
 function main_entry()
 {
     ReadyHTMLEnvironment();
@@ -650,9 +690,9 @@ function GetContrastRatio(FirstRGB, SecondRGB)
 {
     const Lum1 = luminance(FirstRGB);
     const Lum2 = luminance(SecondRGB);    
-    console.log(`Lum1: ${Lum1}, Lum2" ${Lum2}`);
+    
     let ResultBeforeRound = GetContrastRatioWithinLuminances(Lum1, Lum2);
-    console.log(`ResultBeforeRound: ${ResultBeforeRound}`);
+    
     let ResultBeforeRoundMultipliedBy100 = ResultBeforeRound * 100;
     let ResultRoundedButStillMultipliedBy100 = Math.round(ResultBeforeRoundMultipliedBy100); 
     let ResultRouned = ResultRoundedButStillMultipliedBy100 / 100;

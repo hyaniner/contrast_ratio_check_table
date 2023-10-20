@@ -7,7 +7,16 @@
     <body>
         <div class="header">
             <div clas="control_prime">
-                <button class="add_item" onclick="add_item()">Add</button>
+                <button class="add_item" onclick="add_item()">
+                    Add
+                </button>
+                <button class="copy_to_clipboard" onclick="copy_to_clipboard()">
+                    Copy
+                </button>
+                <button class="paste_from_clipboard" onclick="paste_from_clipboard()">
+                    Paste from ->
+                </button>
+                <input class="paste_source" type="text" name="paste_source"">
             </div>
         </div>
         <div class="main_container" id="app_main_container">
@@ -55,7 +64,7 @@
 
             </div>
         </div>
-        
+
 
         <div class="color_manipulate_item primitive_item standard_column">
             <div class="standard_row stretch_container">

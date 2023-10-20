@@ -102,6 +102,17 @@
     padding: 1.5rem 0.5rem;
 }
 
+.item_container_inner.over_threshold
+{
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.item_container_inner.under_threshold
+{
+    font-size: 0.9rem;
+}
 .item_container.hidden
 {
     display: none;

@@ -80,9 +80,16 @@ function RefreshPage()
 
             let ContrastRatio = GetContrastRatio(BackgroundColorRGB, ForeColorRGB);
 
-            
-
             Inner.textContent = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(ContrastRatio);
+            if(ContrastRatio >= 4.5)
+            {
+                Inner.classList.add("over_threshold");
+            }
+            else
+            {
+                Inner.classList.add("under_threshold");
+            }
+            
 
             Inner.style.backgroundColor = ForeColorHex;
             Inner.style.color = invertColor(ForeColorHex, true);
@@ -104,7 +111,14 @@ function GetNewColorManipulatorItemNode()
 
 function add_item()
 {
-    console.log(`hya2`);
+    let ItemZeroHex = "#000000";
+    let ItemZeroHSL = HexToHSL(ItemZeroHex);
+    let ItemZeroNode = GetNewColorManipulatorItemNode();
+    InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHSL);
+    ColorManipulatorArray.push(ItemZeroNode);
+    HSLArray.push(ItemZeroHSL);
+
+    RefreshPage();
 }
 
 function InitializeNewColorManipulatorItem(ItemToWork, NewIndex, InitialColorAsHSL)
@@ -218,6 +232,9 @@ function OnValueChanged(item)
     if (InputType === "button_delete")
     {
         console.log(`Index ${IndexToWork} button_delete`);
+        HSLArray.splice(IndexToWork, 1);
+        ColorManipulatorArray.splice(IndexToWork, 1);
+        RefreshPage();
     }
     else if (InputType === "input_text")
     {

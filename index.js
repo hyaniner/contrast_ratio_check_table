@@ -9,7 +9,7 @@ let MainContainer = undefined;
 
 let LastMainContainerChild = undefined;
 
-let HueArray = Array();
+let HSLArray = Array();
 let ColorManipulatorArray = Array();
 let ResultRowArray = Array();
 
@@ -21,16 +21,18 @@ function main_entry()
     ReadyHTMLEnvironment();
 
     let ItemZeroHex = "#000000";
+    let ItemZeroHSL = HexToHSL(ItemZeroHex);
     let ItemZeroNode = GetNewColorManipulatorItemNode();
-    let ItemZeroHSL = InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHex);
+    InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHSL);
     ColorManipulatorArray.push(ItemZeroNode);
-    HueArray.push(ItemZeroHSL);
+    HSLArray.push(ItemZeroHSL);
 
     let ItemOneHex = "#ffffff";
+    let ItemOneHSL = HexToHSL(ItemOneHex);
     let ItemOneNode = GetNewColorManipulatorItemNode();
-    let ItemOneHSL = InitializeNewColorManipulatorItem(ItemOneNode, ColorManipulatorArray.length, ItemOneHex);
+    InitializeNewColorManipulatorItem(ItemOneNode, ColorManipulatorArray.length, ItemOneHSL);
     ColorManipulatorArray.push(ItemOneNode);
-    HueArray.push(ItemOneHSL);
+    HSLArray.push(ItemOneHSL);
 
 
     RefreshPage();
@@ -69,7 +71,20 @@ function RefreshPage()
         for(let ColIndex = 0; ColIndex < ColorManipulatorArray.length ; ColIndex++)
         {
             let ItemToAdd = ResouceItemContainerBase.cloneNode(true);
-            ItemToAdd.textContent = "Row" + RowIndex + "/Col:" + ColIndex;
+            let Inner = ItemToAdd.querySelector("div.item_container_inner");
+            Inner.textContent = "Row" + RowIndex + "/Col:" + ColIndex;
+            
+            let BackgroundColor = HslToHex(HSLArray[RowIndex]);
+            let ForeColor = HslToHex(HSLArray[ColIndex]);
+            
+            Inner.style.backgroundColor = ForeColor;
+            Inner.style.color = BackgroundColor;
+
+            ItemToAdd.style.backgroundColor = BackgroundColor;
+            ItemToAdd.style.color = ForeColor;
+            
+/*             //SetNodeColor(Inner, BackgroundColor, ForeColor);
+            SetNodeColor(ItemToAdd, ForeColor, BackgroundColor); */
             LastRow.appendChild(ItemToAdd);
         }
     }
@@ -88,7 +103,14 @@ function add_item()
     console.log(`hya2`);
 }
 
-function InitializeNewColorManipulatorItem(ItemToWork, NewIndex, InitialColorAsHex)
+function InitializeNewColorManipulatorItem(ItemToWork, NewIndex, InitialColorAsHSL)
+{
+    InitializeNewColorManipulatorItemStructure(ItemToWork, NewIndex);
+    SetColorMainpulatorItemInputValue(ItemToWork, InitialColorAsHSL);
+    ApplyColorToColorManipulator(ItemToWork, InitialColorAsHSL);
+}
+
+function InitializeNewColorManipulatorItemStructure(ItemToWork, NewIndex)
 {
     let ButtonToReplaces = ItemToWork.querySelectorAll("button.hsl_button_add_sub");    
     for (let ButtonToWork of ButtonToReplaces)
@@ -107,33 +129,30 @@ function InitializeNewColorManipulatorItem(ItemToWork, NewIndex, InitialColorAsH
 
     let DeleteButton = ItemToWork.querySelector("button.delete_button");
     DeleteButton.dataset.itemIndex = NewIndex;
+}
 
-
-    InputRGB.value = InitialColorAsHex;
-    let RGBValidationResult = ConvertRGBFromStringToObjectWithValidation(InputRGB.value);
-
-    let RGBPart = RGBValidationResult.RGB;
-    let ValidationPart = RGBValidationResult.Valid;
+function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
+{
     
-    let HSL = undefined;
+    let InputRGB = ItemToWork.querySelector("input.input_rgb_text");
+    
+    InputRGB.value = HslToHex(HSL);
 
-    if(ValidationPart === true)
-    {
-        HSL = rgbToHSL(RGBPart);
-    }
-    else
-    {
-        console.log(`fail`);
-    }
+    ItemToWork.querySelector("input.hsl_input_text.hue_part").value = HSL.h;    
+    ItemToWork.querySelector("input.hsl_input_range.hue_part").value = HSL.h;
+    
+    ItemToWork.querySelector("input.hsl_input_text.sat_part").value = HSL.s;
+    ItemToWork.querySelector("input.hsl_input_range.sat_part").value = HSL.s;
 
-    let InputTextHue = ItemToWork.querySelector("input.hsl_input_text.hue_part");
-    InputTextHue.value = HSL.h;
-    let InputTextSat = ItemToWork.querySelector("input.hsl_input_text.sat_part");
-    InputTextSat.value = HSL.s;
-    let InputTextLight = ItemToWork.querySelector("input.hsl_input_text.light_part");
-    InputTextLight.value = HSL.l;
+    ItemToWork.querySelector("input.hsl_input_text.light_part").value = HSL.l;
+    ItemToWork.querySelector("input.hsl_input_range.light_part").value = HSL.l;
+}
 
-    return HSL;
+function ApplyColorToColorManipulator(ItemToWork, HSL)
+{
+    let AsHex = HslToHex(HSL);
+    let InvertedColor = invertColor(AsHex, true);
+    SetNodeColor(ItemToWork, InvertedColor, AsHex);
 }
 
 function SetNodeColor(NodeItemToWork, NewColor, NewBackgroundColor)
@@ -161,11 +180,11 @@ function ReadyHTMLEnvironment()
     ResouceColumnContainerBase = ReadHTMLResource("div.column_direction_container.primitive_item");
     ResouceRowContainerBase = ReadHTMLResource("div.row_direction_container.primitive_item");
 
-    let ItemConainer = document.querySelector("div.item_conatiner.primitive_item");
+    let ItemConainer = document.querySelector("div.item_container.primitive_item");
     ItemConainer.style.width = `${ColorManipulatorWidth}px`;
     ItemConainer.style.height = `${ColorManipulatorHeight}px`;
 
-    ResouceItemContainerBase = ReadHTMLResource("div.item_conatiner.primitive_item");
+    ResouceItemContainerBase = ReadHTMLResource("div.item_container.primitive_item");
     ResouceMainContainerChildBase = ReadHTMLResource("div.main_container_only_child.primitive_item");
 
     MainContainer = document.getElementById("app_main_container");
@@ -215,6 +234,7 @@ function ReadRGB(InNodeItemToWork, OutRGB)
     return hexToRgb(RGBAsString);
 }
 
+//https://dev.to/alvaromontoro/building-your-own-color-contrast-checker-4j7o
 function hexToRgb(hex) {
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, function(m, r, g, b) {
@@ -230,10 +250,9 @@ function hexToRgb(hex) {
 }
 
 /**
- * 출처: https://www.30secondsofcode.org/js/s/rgb-to-hsl/
- * 
- * @param {[number, number, number]} rgb R, G, B 값 배열
- * @returns {[number, number, number]} H, S, L 값 배열
+ * 2차 출처: https://www.30secondsofcode.org/js/s/rgb-to-hsl/
+ * 1차 출처: https://solo5star.tistory.com/41
+ * 입출력을 배열에서 오브젝트로 변경
  */
 function rgbToHSL(rgb) {
     const r = (rgb.r) / 255;
@@ -249,9 +268,110 @@ function rgbToHSL(rgb) {
         ? 2 + (b - r) / s
         : 4 + (r - g) / s
       : 0;
+    let hslBeforeNormalize = {
+        h: (60 * h < 0 ? 60 * h + 360 : 60 * h),
+        s: (100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0)),
+        l: ((100 * (2 * l - s)) / 2),
+      };
+
+    let hslAfterNormalize = normalizeHSL(hslBeforeNormalize);
+
+    return hslAfterNormalize;
+}
+
+/**
+ * 1차 출처: https://solo5star.tistory.com/41
+ * 입출력을 배열에서 오브젝트로 변경
+ */
+function normalizeHSL(hsl) {
+    const h = hsl.h;
+    const s = hsl.s;
+    const l = hsl.l;
     return {
-      h: (60 * h < 0 ? 60 * h + 360 : 60 * h),
-      s: (100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0)),
-      l: ((100 * (2 * l - s)) / 2),
+        h: (((Math.round(h) % 360) + 360) % 360), // 0 ~ 360, positive modulo
+        s: (Math.max(0, Math.min(100, Math.round(s)))), // 0 ~ 100
+        l: (Math.max(0, Math.min(100, Math.round(l)))) // 0 ~ 100
     };
   }
+
+/**
+ * 2차 출처: https://www.30secondsofcode.org/js/s/hsl-to-rgb/
+ * 1차 출처: https://solo5star.tistory.com/41
+ * 입출력을 배열에서 오브젝트로 변경 
+ */
+function hslToRGB(hsl) {
+    const h = hsl.h;
+    const s = (hsl.s) / 100;
+    const l = (hsl.l) / 100;
+    const k = (n) => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n) =>
+      l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return {
+        r: 255 * f(0), 
+        g: 255 * f(8),
+        b: 255 * f(4)
+    };
+  }
+
+function HexToHSL(Hex)
+{
+    return rgbToHSL(hexToRgb(Hex));
+}
+
+//https://www.delftstack.com/ko/howto/javascript/rgb-to-hex-javascript/
+function ColorToHex(color) {
+    var hexadecimal = color.toString(16);
+    return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
+}
+  
+//https://www.delftstack.com/ko/howto/javascript/rgb-to-hex-javascript/
+function ConvertRGBtoHexImpl(red, green, blue) {
+    return "#" + ColorToHex(red) + ColorToHex(green) + ColorToHex(blue);
+}
+
+function RGBToHex(RGB)
+{
+    return ConvertRGBtoHexImpl(RGB.r, RGB.g, RGB.b);
+}
+
+function HslToHex(HSL)
+{
+    return RGBToHex(hslToRGB(HSL));
+}
+
+//https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
+function padZero(str, len) {
+    len = len || 2;
+    var zeros = new Array(len).join('0');
+    return (zeros + str).slice(-len);
+}
+
+//https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
+function invertColor(hex, bw) {
+    if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+        throw new Error('Invalid HEX color.');
+    }
+    var r = parseInt(hex.slice(0, 2), 16),
+        g = parseInt(hex.slice(2, 4), 16),
+        b = parseInt(hex.slice(4, 6), 16);
+    if (bw) {
+        // https://stackoverflow.com/a/3943023/112731
+        return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+            ? '#000000'
+            : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return "#" + padZero(r) + padZero(g) + padZero(b);
+}

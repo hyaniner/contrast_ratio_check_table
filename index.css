@@ -79,7 +79,7 @@
     display: none;
 }
 
-.item_conatiner
+.item_container
 {
     display:flex;
     flex-direction: row;
@@ -87,6 +87,24 @@
     align-items: center;
     width: fit-content;
     height: fit-content;
+}
+
+.item_container_inner
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+
+    border: 1px solid red;
+    padding: 1.5rem 0.5rem;
+}
+
+.item_container.hidden
+{
+    display: none;
 }
 
 .row_direction_container.hidden

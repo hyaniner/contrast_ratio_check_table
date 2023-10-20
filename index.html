@@ -14,18 +14,18 @@
             <div class="main_container_only_child initial_item">
                 <div class="column_direction_container">
                     <div class="row_direction_container">
-                        <div class="item_conatiner">
+                        <div class="item_container">
                             aaa
                         </div>
-                        <div class="item_conatiner">
+                        <div class="item_container">
                             bbb
                         </div>
                     </div>
                     <div class="row_direction_container">
-                        <div class="item_conatiner">
+                        <div class="item_container">
                             ccc
                         </div>
-                        <div class="item_conatiner">
+                        <div class="item_container">
                             ddd
                         </div>
                     </div>
@@ -40,8 +40,10 @@
         <div class="row_direction_container primitive_item">
 
         </div>
-        <div class="item_conatiner primitive_item">
+        <div class="item_container primitive_item">
+            <div class="item_container_inner">
 
+            </div>
         </div>
 
         <div class="left_up_corner_spacer primitive_item">
@@ -82,7 +84,7 @@
                             </button> 
                         </div>
                         <div class="standard_row">
-                            <input class="hsl_input_range" type="range" min = "0" max = "360" step = "a" name = "hue_as_bar" data-item-index="0" data-sub-category="h" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range hue_part" type="range" min = "0" max = "360" step = "a" name = "hue_as_bar" data-item-index="0" data-sub-category="h" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>
@@ -104,7 +106,7 @@
                             </button> 
                         </div>
                         <div class="standard_row">
-                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar"  data-item-index="0" data-sub-category="s" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range sat_part" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar"  data-item-index="0" data-sub-category="s" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,7 @@
                             </button> 
                         </div>                    
                         <div class="standard_row">
-                            <input class="hsl_input_range" type="range" min = "0" max = "100" step = "a" name = "light_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range light_part" type="range" min = "0" max = "100" step = "a" name = "light_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>

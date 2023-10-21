@@ -25,6 +25,7 @@ function copy_to_clipboard()
     }
     let StringToCopy = ItemsToCopy.join(",");
     navigator.clipboard.writeText(StringToCopy);
+    document.querySelector("input.paste_source").value = StringToCopy;
 }
 
 function paste_from_clipboard()

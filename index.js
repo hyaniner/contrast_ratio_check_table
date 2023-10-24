@@ -12,6 +12,13 @@ let LastMainContainerChild = undefined;
 let HSLArray = Array();
 let ColorManipulatorArray = Array();
 
+let LastSelectedIndex = undefined;
+let LastSelectedInputType = undefined;
+let LastSelectedSubCategory = undefined;
+let LastSelectedRowOrCol = undefined;
+
+let DisplayDebugMessage = false;
+
 console.log(`hya`);
 main_entry();
 
@@ -105,14 +112,18 @@ function RefreshPage()
     FirstRow.appendChild(ResouceLeftUpCornerSpacerBase.cloneNode(true));
     for (let ManipulatorItem of ColorManipulatorArray)
     {
-        FirstRow.appendChild(ManipulatorItem.cloneNode(true));
+        let itemToAppend = ManipulatorItem.cloneNode(true);
+        SetRowOrCol(itemToAppend, "Row");
+        FirstRow.appendChild(itemToAppend);
     }
 
     let SecondRow = MainContainerChildContainer.appendChild(ResouceRowContainerBase.cloneNode(true));
     let FirstColumnOfTable = SecondRow.appendChild(ResouceColumnContainerBase.cloneNode(true));
     for (let ManipulatorItem of ColorManipulatorArray)
     {
-        FirstColumnOfTable.appendChild(ManipulatorItem.cloneNode(true));
+        let itemToAppend = ManipulatorItem.cloneNode(true);
+        SetRowOrCol(itemToAppend, "Col");
+        FirstColumnOfTable.appendChild(itemToAppend);
     }
 
     let SecondColumnOfTable = SecondRow.appendChild(ResouceColumnContainerBase.cloneNode(true));
@@ -202,6 +213,27 @@ function InitializeNewColorManipulatorItemStructure(ItemToWork, NewIndex)
     DeleteButton.dataset.itemIndex = NewIndex;
 }
 
+function SetRowOrCol(ItemToWork, NewValue)
+{
+    let ButtonToReplaces = ItemToWork.querySelectorAll("button.hsl_button_add_sub");    
+    for (let ButtonToWork of ButtonToReplaces)
+    {
+        ButtonToWork.dataset.itemRowOrCol = NewValue;
+        //ButtonToWork.value = 0;
+    }
+    let InputToReplaces = ItemToWork.querySelectorAll("input.hsl_input_text, input.hsl_input_range");
+    for (let InputToWork of InputToReplaces)
+    {
+        InputToWork.dataset.itemRowOrCol = NewValue;
+        //InputToWork.value = 0;
+    }
+    let InputRGB = ItemToWork.querySelector("input.input_rgb_text");
+    InputRGB.dataset.itemRowOrCol = NewValue;    
+
+    let DeleteButton = ItemToWork.querySelector("button.delete_button");
+    DeleteButton.dataset.itemRowOrCol = NewValue;
+}
+
 function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
 {
     
@@ -284,9 +316,16 @@ function OnValueChanged(item)
 {
 
     let IndexToWork = item.dataset.itemIndex;
-    let subCategory = item.dataset.subCategory;
     let InputType = item.dataset.inputType;
-    console.log(`Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType}`);
+    let subCategory = item.dataset.subCategory;    
+    let RowOrCol = item.dataset.itemRowOrCol;
+
+    LastSelectedIndex = IndexToWork;
+    LastSelectedInputType = InputType;
+    LastSelectedSubCategory = subCategory ;
+    LastSelectedRowOrCol = RowOrCol;
+
+    console.log(`기억: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);
 
     let OldHSL = HSLArray[IndexToWork];
     let ColorManipulator = ColorManipulatorArray[IndexToWork];
@@ -505,6 +544,41 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
     SetColorMainpulatorItemInputValue(ColorManipulator, NewHSL);
     ApplyColorToColorManipulator(ColorManipulator, NewHSL);
     RefreshPage();
+
+    let ColorManipulatorItems = document.querySelectorAll("div.color_manipulate_item");
+    console.log(`들어오나요 ${ColorManipulatorItems.length}`);
+    for (let ColorManipulatorItem of ColorManipulatorItems)
+    {
+        let Found = false;
+        let  controlElements = ColorManipulatorItem.querySelectorAll("input.control_element, button.control_element");
+        console.log(`들어오나요 서브 ${controlElements.length}`);
+        for(let item of controlElements)
+        {
+            let IndexToWork = item.dataset.itemIndex;
+            let InputType = item.dataset.inputType;
+            let subCategory = item.dataset.subCategory;    
+            let RowOrCol = item.dataset.itemRowOrCol;
+
+            console.log(`확인: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);
+
+            if(
+                item.dataset.itemIndex == LastSelectedIndex
+                && item.dataset.inputType == LastSelectedInputType
+                && item.dataset.subCategory == LastSelectedSubCategory
+                && item.dataset.itemRowOrCol == LastSelectedRowOrCol
+            )
+            {
+                Found = true;
+                item.focus();
+                console.log(`포커스 성공!`)
+                break;
+            }
+        }
+        if(Found === true)
+        {
+            break;
+        }
+    }
 }
 
 function HexToRGBWithValidation(Hex)

@@ -68,18 +68,16 @@
 
 
         <div class="color_manipulate_item primitive_item standard_column">
-            <div class="standard_row stretch_container">
-                <div class="standard_row stretch_else">
-                    ColorDisplay
-                </div>
-                <div class="standard_row" style="flex:0 0 auto;">
-                    <button class="delete_button" data-item-index="0" data-sub-category="all" data-input-type="button_delete" onclick="OnValueChanged(this)">
-                        Del
-                    </button>
-                </div>
+            <div class="some_space">
+
             </div>
+            <div class="standard_row stretch_container horozontal_left">
+                <button class="delete_button" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="all" data-input-type="button_delete" onclick="OnValueChanged(this)">
+                    Delete
+                </button>
+            </div>            
             <div class="standard_row">
-                rgb<input class="input_rgb_text" type="text" name="rgb" data-item-index="0" data-sub-category="rgb" data-input-type="input_text" onchange="OnValueChanged(this)">
+                rgb<input class="input_rgb_text control_element" type="text" name="rgb" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="rgb" data-input-type="input_text" onchange="OnValueChanged(this)">
             </div>
             <div class="standard_column">
                 <div class="standard_row_vertical_align_top">
@@ -88,16 +86,16 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text hue_part" type="text" name="hue"  data-item-index="0" data-sub-category="h" data-input-type="input_text" onchange="OnValueChanged(this)">                
-                            <button class="hsl_button_add_sub hue_add" data-item-index="0" data-sub-category="h" data-input-type="button_add" onclick="OnValueChanged(this)">
-                                +
-                            </button>
-                            <button class="hsl_button_add_sub hue_sub" data-item-index="0" data-sub-category="h" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                            <input class="hsl_input_text hue_part control_element" type="text" name="hue"  data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="h" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <button class="hsl_button_add_sub hue_sub control_element" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="h" data-input-type="button_sub" onclick="OnValueChanged(this)">
                                 -
                             </button> 
+                            <button class="hsl_button_add_sub hue_add control_element" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="h" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
+                            </button>                            
                         </div>
                         <div class="standard_row">
-                            <input class="hsl_input_range hue_part" type="range" min = "0" max = "360" step = "a" name = "hue_as_bar" data-item-index="0" data-sub-category="h" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range hue_part control_element" type="range" min = "0" max = "360" step = "a" name = "hue_as_bar" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="h" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>
@@ -110,16 +108,16 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text sat_part" type="text" name="sat" data-item-index="0" data-sub-category="s" data-input-type="input_text" onchange="OnValueChanged(this)">                
-                            <button class="hsl_button_add_sub sat_add"  data-item-index="0" data-sub-category="s" data-input-type="button_add" onclick="OnValueChanged(this)">
-                                +
-                            </button> 
-                            <button class="hsl_button_add_sub sat_sub"  data-item-index="0" data-sub-category="s" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                            <input class="hsl_input_text sat_part control_element" type="text" name="sat" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="s" data-input-type="input_text" onchange="OnValueChanged(this)">                
+                            <button class="hsl_button_add_sub sat_sub control_element"  data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="s" data-input-type="button_sub" onclick="OnValueChanged(this)">
                                 -
+                            </button> 
+                            <button class="hsl_button_add_sub sat_add control_element"  data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="s" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
                             </button> 
                         </div>
                         <div class="standard_row">
-                            <input class="hsl_input_range sat_part" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar"  data-item-index="0" data-sub-category="s" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range sat_part control_element" type="range" min = "0" max = "100" step = "a" name = "sat_as_bar"  data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="s" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>
@@ -132,20 +130,20 @@
                     </div>
                     <div class="standard_column">
                         <div class="standard_row">
-                            <input class="hsl_input_text light_part" type="text" name="lum" data-item-index="0" data-sub-category="l" data-input-type="input_text" onchange="OnValueChanged(this)">
-                            <button class="hsl_button_add_sub light_add" data-item-index="0" data-sub-category="l" data-input-type="button_add" onclick="OnValueChanged(this)">
-                                +
-                            </button> 
-                            <button class="hsl_button_add_sub light_sub" data-item-index="0" data-sub-category="l" data-input-type="button_sub" onclick="OnValueChanged(this)">
+                            <input class="hsl_input_text light_part control_element" type="text" name="lum" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="l" data-input-type="input_text" onchange="OnValueChanged(this)">
+                            <button class="hsl_button_add_sub light_sub control_element" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="l" data-input-type="button_sub" onclick="OnValueChanged(this)">
                                 -
+                            </button> 
+                            <button class="hsl_button_add_sub light_add control_element" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="l" data-input-type="button_add" onclick="OnValueChanged(this)">
+                                +
                             </button> 
                         </div>                    
                         <div class="standard_row">
-                            <input class="hsl_input_range light_part" type="range" min = "0" max = "100" step = "a" name = "light_as_bar" data-item-index="0" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
+                            <input class="hsl_input_range light_part control_element" type="range" min = "0" max = "100" step = "a" name = "light_as_bar" data-item-index="0" data-item-row-or-col="not_defined" data-sub-category="l" data-input-type="input_range" onchange="OnValueChanged(this)">
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>   
         </div>
 
 

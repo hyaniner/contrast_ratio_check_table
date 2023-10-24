@@ -142,6 +142,7 @@
     height: fit-content;
 }
 
+
 .standard_column
 {
     display:flex;
@@ -152,10 +153,10 @@
     height: fit-content;
 }
 
-.stretch_container
+.standard_row.stretch_container
 {
-    justify-content:stretch;
     width:100%;
+    flex: 1 1 auto;
 }
 
 .stretch_else
@@ -173,3 +174,14 @@
 {
     display: none;
 }
+
+.some_space
+{
+    padding: 3px;
+}
+
+.horozontal_left
+{
+    justify-content: flex-end;
+}
+

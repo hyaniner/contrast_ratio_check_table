@@ -339,7 +339,7 @@ function OnValueChanged(item)
     LastSelectedSubCategory = subCategory ;
     LastSelectedRowOrCol = RowOrCol;
 
-    if(DisplayDebugMessage===true){console.log(`기억: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
+    if(DisplayDebugMessage===true){console.log(`Check: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
 
     let OldHSL = HSLArray[IndexToWork];
     let ColorManipulator = ColorManipulatorArray[IndexToWork];
@@ -365,7 +365,7 @@ function OnValueChanged(item)
             {
                 OldRGB = ColorManipulator.querySelector("input.input_rgb_text").value;
                 item.value = OldRGB;
-                if(DisplayDebugMessage===true){console.log(`안돼여긴`);}
+                if(DisplayDebugMessage===true){console.log(`NoWayHere`);}
             }
             else
             {
@@ -560,12 +560,12 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
     RefreshPage();
 
     let ColorManipulatorItems = document.querySelectorAll("div.color_manipulate_item");
-    if(DisplayDebugMessage===true){console.log(`들어오나요 ${ColorManipulatorItems.length}`);}
+    if(DisplayDebugMessage===true){console.log(`DoesEnterCheck ${ColorManipulatorItems.length}`);}
     for (let ColorManipulatorItem of ColorManipulatorItems)
     {
         let Found = false;
         let  controlElements = ColorManipulatorItem.querySelectorAll("input.control_element, button.control_element");
-        if(DisplayDebugMessage===true){console.log(`들어오나요 서브 ${controlElements.length}`);}
+        if(DisplayDebugMessage===true){console.log(`DoesEnterCheck sub ${controlElements.length}`);}
         for(let item of controlElements)
         {
             let IndexToWork = item.dataset.itemIndex;
@@ -573,7 +573,7 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
             let subCategory = item.dataset.subCategory;    
             let RowOrCol = item.dataset.itemRowOrCol;
 
-            if(DisplayDebugMessage===true){console.log(`확인: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
+            if(DisplayDebugMessage===true){console.log(`Confirm: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
 
             if(
                 item.dataset.itemIndex == LastSelectedIndex
@@ -584,7 +584,7 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
             {
                 Found = true;
                 item.focus();
-                if(DisplayDebugMessage===true){console.log(`포커스 성공!`);}
+                if(DisplayDebugMessage===true){console.log(`Focused!`);}
                 break;
             }
         }
@@ -631,7 +631,7 @@ function hexToRgb(hex) {
 
 /**
  * https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion/9493060#9493060
- * 입출력 변경
+ * Modified input/output
  */
 function rgbToHSL(rgb) {
     
@@ -642,7 +642,7 @@ function rgbToHSL(rgb) {
     const vmax = Math.max(r, g, b), vmin = Math.min(r, g, b);
     let h, s, l = (vmax + vmin) / 2;
   
-    /* 여기도 반환 있어요 */
+    /* Return exists here too */
     if (vmax === vmin) {
         return {
             h: 0*360,
@@ -672,8 +672,8 @@ function rgbToHSL(rgb) {
 }
 
 /**
- * 1차 출처: https://solo5star.tistory.com/41
- * 입출력을 배열에서 오브젝트로 변경
+ *  https://solo5star.tistory.com/41
+ * Modified input/output
  */
 function normalizeHSL(hsl) {
     const h = hsl.h;
@@ -687,9 +687,9 @@ function normalizeHSL(hsl) {
   }
 
 /**
- * 2차 출처: https://www.30secondsofcode.org/js/s/hsl-to-rgb/
- * 1차 출처: https://solo5star.tistory.com/41
- * 입출력을 배열에서 오브젝트로 변경 
+ *  https://www.30secondsofcode.org/js/s/hsl-to-rgb/
+ *  https://solo5star.tistory.com/41
+ * Modified input/output
  */
 function hslToRGB(hsl) {
     const h = hsl.h;
@@ -730,7 +730,7 @@ function HexToHSL(Hex)
 {
     let RGB = hexToRgb(Hex);
     let HSL = rgbToHSL(RGB);
-    if(DisplayDebugMessage===true){console.log(`HexToHSL 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
+    if(DisplayDebugMessage===true){console.log(`HexToHSL Inner,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
     return HSL;
 }
 
@@ -754,7 +754,7 @@ function HslToHex(HSL)
 {
     const RGB = hslToRGB(HSL);
     const Hex = RGBToHex(RGB);
-    if(DisplayDebugMessage===true){console.log(`HslToHex 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
+    if(DisplayDebugMessage===true){console.log(`HslToHex Inner,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
     return Hex;
 }
 

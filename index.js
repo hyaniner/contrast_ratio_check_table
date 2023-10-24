@@ -142,8 +142,16 @@ function RefreshPage()
             let ForeColorHex = RGBToHex(ForeColorRGB);
 
             let ContrastRatio = GetContrastRatio(BackgroundColorRGB, ForeColorRGB);
+            if(RowIndex == ColIndex)
+            {
+                Inner.textContent = "same";
+            }
+            else
+            {
+                Inner.textContent = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(ContrastRatio);
+            }
 
-            Inner.textContent = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(ContrastRatio);
+
             if(ContrastRatio >= 4.5)
             {
                 Inner.classList.add("over_threshold");
@@ -152,13 +160,19 @@ function RefreshPage()
             {
                 Inner.classList.add("under_threshold");
             }
-            
+
 
             Inner.style.backgroundColor = ForeColorHex;
             //Inner.style.color = invertColor(ForeColorHex, true);
             Inner.style.color = BackgroundColorHex;
 
             ItemToAdd.style.backgroundColor = BackgroundColorHex;
+
+            if(RowIndex == ColIndex)
+            {
+                let InvertedColorToDisplaySame = invertColor(ForeColorHex, true);
+                Inner.style.color = InvertedColorToDisplaySame;
+            }
 
             LastRow.appendChild(ItemToAdd);
         }

@@ -177,7 +177,6 @@ function RefreshPage()
             LastRow.appendChild(ItemToAdd);
         }
     }
-
     MainContainer.replaceChild(NewFragment, LastMainContainerChild);
     LastMainContainerChild = MainContainer.querySelector("div.main_container_only_child");    
 }
@@ -296,6 +295,7 @@ function ReadyHTMLEnvironment()
     let ColorManipulator = document.querySelector("div.color_manipulate_item.primitive_item");
     let ColorManipulatorWidth = ColorManipulator.getBoundingClientRect().width;
     let ColorManipulatorHeight = ColorManipulator.getBoundingClientRect().height;
+    if(DisplayDebugMessage===true){console.log(`ReadyHTMLEnvironment ColorManipulator:${ColorManipulator} ColorManipulatorWidth:${ColorManipulatorWidth} ColorManipulatorHeight:${ColorManipulatorHeight}`);}
 
     ResourceColorManipulatorBase = ReadHTMLResource("div.color_manipulate_item.primitive_item");
     
@@ -319,10 +319,22 @@ function ReadyHTMLEnvironment()
 
 function ReadHTMLResource(InSelector)
 {
-    let Readed = document.querySelector(InSelector);
-    let Cloned = Readed.cloneNode(true)
+    let Readed = document.querySelector(InSelector);    
+    let Cloned = Readed.cloneNode(true)    
+    if(DisplayDebugMessage===true){
+        let classListCheck = Readed.classList;
+        let classes = "";
+        for (let itemToWrite of classListCheck)
+        {
+            classes = classes + itemToWrite + ", ";
+        }
+        console.log(`ReadHTMLResource: Readed:${Readed} classes:${classes} // Readed.width:${Readed.getBoundingClientRect().width} Cloned:${Cloned} Cloned.width:${Cloned.getBoundingClientRect().width}`);
+    }
+
     Cloned.classList.remove("primitive_item");    
     Readed.classList.add("hidden");
+
+
     return Cloned;
 }
 

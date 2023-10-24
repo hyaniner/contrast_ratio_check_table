@@ -19,7 +19,7 @@ let LastSelectedRowOrCol = undefined;
 
 let DisplayDebugMessage = false;
 
-console.log(`hya`);
+if(DisplayDebugMessage===true){console.log(`hya`);}
 main_entry();
 
 function copy_to_clipboard()
@@ -78,7 +78,7 @@ function main_entry()
 
     let ItemZeroHex = "#000000";
     let ItemZeroHSL = HexToHSL(ItemZeroHex);
-    console.log(`main_entry::HSL?:${ItemZeroHSL.h},${ItemZeroHSL.s},${ItemZeroHSL.l}`);
+    if(DisplayDebugMessage===true){console.log(`main_entry::HSL?:${ItemZeroHSL.h},${ItemZeroHSL.s},${ItemZeroHSL.l}`);}
     
     let ItemZeroNode = GetNewColorManipulatorItemNode();
     InitializeNewColorManipulatorItem(ItemZeroNode, ColorManipulatorArray.length, ItemZeroHSL);
@@ -239,10 +239,10 @@ function SetColorMainpulatorItemInputValue(ItemToWork, HSL)
     
     let InputRGB = ItemToWork.querySelector("input.input_rgb_text");
     
-    console.log(`HSL?:${HSL.h},${HSL.s},${HSL.l}`);
+    if(DisplayDebugMessage===true){console.log(`HSL?:${HSL.h},${HSL.s},${HSL.l}`);}
 
     let AsHex = HslToHex(HSL);
-    console.log(`HSL-HexConverted: ${AsHex}`);
+    if(DisplayDebugMessage===true){console.log(`HSL-HexConverted: ${AsHex}`);}
     InputRGB.value = AsHex
 
     let HRounded =  (Math.round(HSL.h * 10))/10;
@@ -325,14 +325,14 @@ function OnValueChanged(item)
     LastSelectedSubCategory = subCategory ;
     LastSelectedRowOrCol = RowOrCol;
 
-    console.log(`기억: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);
+    if(DisplayDebugMessage===true){console.log(`기억: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
 
     let OldHSL = HSLArray[IndexToWork];
     let ColorManipulator = ColorManipulatorArray[IndexToWork];
 
     if (InputType === "button_delete")
     {
-        console.log(`Index ${IndexToWork} button_delete`);
+        if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} button_delete`);}
         HSLArray.splice(IndexToWork, 1);
         ColorManipulatorArray.splice(0, ColorManipulatorArray.length);
         RebuildColorManipulatorArrayFromHSLArray();
@@ -342,21 +342,21 @@ function OnValueChanged(item)
     {
         if (subCategory === "rgb")
         {
-            console.log(`Index ${IndexToWork} input_text, rgb`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_text, rgb`);}
             let NewHex = item.value;
-            console.log(`NewValue:${NewHex}`);
+            if(DisplayDebugMessage===true){console.log(`NewValue:${NewHex}`);}
             let RGBConvertResult = HexToRGBWithValidation(NewHex);
-            console.log(`RGBConvertResult: ${RGBConvertResult.Valid}`);
+            if(DisplayDebugMessage===true){console.log(`RGBConvertResult: ${RGBConvertResult.Valid}`);}
             if(RGBConvertResult.Valid !== true)
             {
                 OldRGB = ColorManipulator.querySelector("input.input_rgb_text").value;
                 item.value = OldRGB;
-                console.log(`안돼여긴`);
+                if(DisplayDebugMessage===true){console.log(`안돼여긴`);}
             }
             else
             {
                 let NewHSL = rgbToHSL(RGBConvertResult.RGB);
-                console.log(`NewHex ${NewHex} asRGB: ${RGBConvertResult.RGB.r},${RGBConvertResult.RGB.g},${RGBConvertResult.RGB.b} asHSL:${NewHSL.h},${NewHSL.s},${NewHSL.l}`);
+                if(DisplayDebugMessage===true){console.log(`NewHex ${NewHex} asRGB: ${RGBConvertResult.RGB.r},${RGBConvertResult.RGB.g},${RGBConvertResult.RGB.b} asHSL:${NewHSL.h},${NewHSL.s},${NewHSL.l}`);}
 
                 ModifyColorManipulatorAndHLSArrayAndRefreash(IndexToWork, NewHSL);
             }
@@ -368,23 +368,23 @@ function OnValueChanged(item)
 
             let asNum = Number.parseInt(item.value, 10);            
             let IsInt = !(Number.isNaN(asNum));
-            console.log(`asnum : ${asNum} and IsInt:${IsInt}`);
+            if(DisplayDebugMessage===true){console.log(`asnum : ${asNum} and IsInt:${IsInt}`);}
             if(IsInt)
             {
                 if (subCategory === "h")
                 {
-                    console.log(`Index ${IndexToWork} input_text, h`);
+                    if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_text, h`);}
                     let NewH = asNum;
                     if(NewH > 360 || NewH < 0)
                     {
                         NewH = (((Math.round(NewH) % 360) + 360) % 360);
                     }
                     NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
-                    console.log(`NewH:${NewH}`);
+                    if(DisplayDebugMessage===true){console.log(`NewH:${NewH}`);}
                 }
                 else if (subCategory === "s")
                 {
-                    console.log(`Index ${IndexToWork} input_text, s`);
+                    if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_text, s`);}
                     let NewS = asNum;
                     if(NewS > 100 || NewS < 0)
                     {
@@ -397,7 +397,7 @@ function OnValueChanged(item)
                 }
                 else if (subCategory === "l")
                 {
-                    console.log(`Index ${IndexToWork} input_text, l`);
+                    if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_text, l`);}
                     let NewL = asNum;
                     if(NewL > 100 || NewL < 0)
                     {
@@ -439,7 +439,7 @@ function OnValueChanged(item)
         let RangeOverflowed = false;
         if (subCategory === "h")
         {
-            console.log(`Index ${IndexToWork} button_add/sub, h`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} button_add/sub, h`);}
             let NewH = undefined;
             if(InputType === "button_add")
             {
@@ -459,7 +459,7 @@ function OnValueChanged(item)
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${IndexToWork} button_add/sub, s`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} button_add/sub, s`);}
             let NewS = undefined;
             if(InputType === "button_add")
             {
@@ -482,7 +482,7 @@ function OnValueChanged(item)
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${IndexToWork} button_add/sub, l`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} button_add/sub, l`);}
             let NewL = undefined;
             if(InputType === "button_add")
             {
@@ -515,19 +515,19 @@ function OnValueChanged(item)
         let NewHSL = undefined;
         if (subCategory === "h")
         {
-            console.log(`Index ${IndexToWork} input_range, h`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_range, h`);}
             let NewH = item.value;
             NewHSL = { h: NewH, s:OldHSL.s, l:OldHSL.l };
         }
         else if (subCategory === "s")
         {
-            console.log(`Index ${IndexToWork} input_range, s`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_range, s`);}
             let NewS = item.value;
             NewHSL = { h: OldHSL.h, s:NewS, l:OldHSL.l };
         }
         else if (subCategory === "l")
         {
-            console.log(`Index ${IndexToWork} input_range, l`);
+            if(DisplayDebugMessage===true){console.log(`Index ${IndexToWork} input_range, l`);}
             let NewL = item.value;
             NewHSL = { h: OldHSL.h, s:OldHSL.s, l:NewL };
         }
@@ -546,12 +546,12 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
     RefreshPage();
 
     let ColorManipulatorItems = document.querySelectorAll("div.color_manipulate_item");
-    console.log(`들어오나요 ${ColorManipulatorItems.length}`);
+    if(DisplayDebugMessage===true){console.log(`들어오나요 ${ColorManipulatorItems.length}`);}
     for (let ColorManipulatorItem of ColorManipulatorItems)
     {
         let Found = false;
         let  controlElements = ColorManipulatorItem.querySelectorAll("input.control_element, button.control_element");
-        console.log(`들어오나요 서브 ${controlElements.length}`);
+        if(DisplayDebugMessage===true){console.log(`들어오나요 서브 ${controlElements.length}`);}
         for(let item of controlElements)
         {
             let IndexToWork = item.dataset.itemIndex;
@@ -559,7 +559,7 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
             let subCategory = item.dataset.subCategory;    
             let RowOrCol = item.dataset.itemRowOrCol;
 
-            console.log(`확인: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);
+            if(DisplayDebugMessage===true){console.log(`확인: Index: ${IndexToWork} / subCategory: ${subCategory} / InputType:${InputType} / RowOrCol : ${RowOrCol}`);}
 
             if(
                 item.dataset.itemIndex == LastSelectedIndex
@@ -570,7 +570,7 @@ function ModifyColorManipulatorAndHLSArrayAndRefreash(Index, NewHSL)
             {
                 Found = true;
                 item.focus();
-                console.log(`포커스 성공!`)
+                if(DisplayDebugMessage===true){console.log(`포커스 성공!`);}
                 break;
             }
         }
@@ -653,7 +653,7 @@ function rgbToHSL(rgb) {
         l: l*100
     };
 
-    console.log(`hslBeforeNormalize: ${HSLResult.h}, ${HSLResult.s}, ${HSLResult.l}`);
+    if(DisplayDebugMessage===true){console.log(`hslBeforeNormalize: ${HSLResult.h}, ${HSLResult.s}, ${HSLResult.l}`);}
     return HSLResult;
 }
 
@@ -716,7 +716,7 @@ function HexToHSL(Hex)
 {
     let RGB = hexToRgb(Hex);
     let HSL = rgbToHSL(RGB);
-    console.log(`HexToHSL 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);
+    if(DisplayDebugMessage===true){console.log(`HexToHSL 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
     return HSL;
 }
 
@@ -740,7 +740,7 @@ function HslToHex(HSL)
 {
     const RGB = hslToRGB(HSL);
     const Hex = RGBToHex(RGB);
-    console.log(`HslToHex 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);
+    if(DisplayDebugMessage===true){console.log(`HslToHex 내부,HSL:${HSL.h},${HSL.s},${HSL.l} / RGB: ${RGB.r},${RGB.g},${RGB.b} / Hex: ${Hex} `);}
     return Hex;
 }
 
@@ -761,7 +761,7 @@ function invertColor(hex, bw) {
         hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
     }
     if (hex.length !== 6) {
-        console.log(`Invalid HEX color: ${hex}`);
+        if(DisplayDebugMessage===true){console.log(`Invalid HEX color: ${hex}`);}
         throw new Error('Invalid HEX color.');
     }
     var r = parseInt(hex.slice(0, 2), 16),

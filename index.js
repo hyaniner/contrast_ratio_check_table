@@ -20,7 +20,7 @@ let LastSelectedRowOrCol = undefined;
 let DisplayDebugMessage = false;
 
 if(DisplayDebugMessage===true){console.log(`hya`);}
-main_entry();
+window.addEventListener("load", main_entry);
 
 function copy_to_clipboard()
 {
